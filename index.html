@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulso — Sistema de Captação para Personal Trainers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0A0A0F;
+      --surface: #12121A;
+      --surface2: #1C1C28;
+      --accent: #5B6CFF;
+      --accent2: #A78BFA;
+      --green: #22D3A0;
+      --text: #E8E8F0;
+      --muted: #7A7A9A;
+      --border: rgba(255,255,255,0.07);
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* noise de fundo */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(10,10,15,0.95), transparent);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-cta {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover { background: #4a5aee; transform: translateY(-1px); }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 40px 80px;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(91,108,255,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(91,108,255,0.12);
+      border: 1px solid rgba(91,108,255,0.3);
+      color: var(--accent2);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+      color: var(--text);
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto 48px;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #7C3AED);
+      color: white;
+      border: none;
+      padding: 16px 36px;
+      border-radius: 100px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+      box-shadow: 0 8px 32px rgba(91,108,255,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(91,108,255,0.45); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 16px 36px;
+      border-radius: 100px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+    .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+    .stats-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 40px;
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-item { text-align: center; }
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.02em; }
+
+    section { position: relative; z-index: 1; }
+
+    .dor {
+      padding: 100px 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .dor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 60px;
+    }
+
+    .dor-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.3s;
+    }
+    .dor-card:hover { border-color: rgba(91,108,255,0.3); transform: translateY(-4px); }
+
+    .dor-icon { font-size: 1.8rem; margin-bottom: 16px; }
+
+    .dor-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .dor-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    .metodo {
+      padding: 100px 40px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .metodo-inner { max-width: 1000px; margin: 0 auto; }
+
+    .metodo-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+      margin-bottom: 64px;
+    }
+
+    .fases {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .fase {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fase::before {
+      content: attr(data-num);
+      position: absolute;
+      top: -10px; right: 10px;
+      font-family: var(--font-display);
+      font-size: 5rem;
+      font-weight: 800;
+      color: rgba(91,108,255,0.06);
+      line-height: 1;
+    }
+
+    .fase-num {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    .fase h3 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .fase p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    .fase-days {
+      font-size: 0.75rem;
+      color: var(--accent2);
+      font-weight: 500;
+      margin-top: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    .oferta {
+      padding: 100px 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .oferta-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .oferta-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .oferta-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, rgba(91,108,255,0.08), rgba(124,58,237,0.05));
+    }
+
+    .oferta-badge {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 100px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .oferta-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .oferta-price {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      margin: 20px 0 8px;
+    }
+
+    .oferta-price span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0;
+    }
+
+    .oferta-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    .oferta-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .oferta-items li {
+      font-size: 0.9rem;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-weight: 300;
+    }
+
+    .oferta-items li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .cta-final {
+      padding: 120px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-glow {
+      position: absolute;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(91,108,255,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-final h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    .cta-final p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 48px;
+      font-weight: 300;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-text { font-size: 0.82rem; color: var(--muted); }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .hero { padding: 100px 20px 60px; }
+      .stats-bar { gap: 40px; padding: 28px 20px; }
+      .dor, .oferta { padding: 60px 20px; }
+      .metodo { padding: 60px 20px; }
+      .cta-final { padding: 80px 20px; }
+      footer { padding: 24px 20px; flex-direction: column; text-align: center; }
+      .oferta-cards { grid-template-columns: 1fr; }
+      .fases { grid-template-columns: 1fr; }
+      .metodo-header { grid-template-columns: 1fr; gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">Pulso</div>
+    <a href="#cta" class="nav-cta">Quero meus alunos</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-inner reveal">
+      <div class="hero-badge">Sistema de Captação Estruturada</div>
+      <h1>Pare de depender de<br><em>indicação para ter aluno.</em></h1>
+      <p class="hero-sub">
+        Construo o sistema de captação do personal trainer que já sobrevive da profissão — mas ainda não sabe de onde vem o próximo aluno.
+      </p>
+      <div class="hero-actions">
+        <a href="#cta" class="btn-primary">Quero diagnóstico gratuito</a>
+        <a href="#metodo" class="btn-ghost">Como funciona</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat-item reveal">
+      <div class="stat-number">30d</div>
+      <div class="stat-label">para o sistema funcionar</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:0.1s">
+      <div class="stat-number">4</div>
+      <div class="stat-label">fases estruturadas</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:0.2s">
+      <div class="stat-number">R$0</div>
+      <div class="stat-label">sem tráfego pago inicialmente</div>
+    </div>
+  </div>
+
+  <div class="dor">
+    <div class="reveal">
+      <div class="section-label">O problema</div>
+      <h2 class="section-title">Você posta, treina bem,<br>mas o DM não chega.</h2>
+      <p class="section-sub">Não é frequência, não é engajamento. É posicionamento e mensagem. O perfil não está trabalhando por você.</p>
+    </div>
+    <div class="dor-grid">
+      <div class="dor-card reveal">
+        <div class="dor-icon">📉</div>
+        <h3>Instabilidade todo mês</h3>
+        <p>Você não sabe de onde vem o próximo aluno. A renda oscila e a ansiedade cresce junto com a agenda vazia.</p>
+      </div>
+      <div class="dor-card reveal" style="transition-delay:0.1s">
+        <div class="dor-icon">🔄</div>
+        <h3>100% por indicação</h3>
+        <p>Quando a indicação para, o negócio para. Você não tem controle — está refém da boa vontade dos outros.</p>
+      </div>
+      <div class="dor-card reveal" style="transition-delay:0.2s">
+        <div class="dor-icon">📱</div>
+        <h3>Posta sem resultado</h3>
+        <p>Conteúdo regular, engajamento baixo, nenhum aluno chegando pelo digital. Esforço sem retorno.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="metodo" id="metodo">
+    <div class="metodo-inner">
+      <div class="metodo-header">
+        <div class="reveal">
+          <div class="section-label">O método</div>
+          <h2 class="section-title">Sistema de Captação<br>Estruturada (SCE)</h2>
+        </div>
+        <div class="reveal" style="transition-delay:0.1s">
+          <p style="color:var(--muted);font-weight:300;line-height:1.7;margin-top:8px;">
+            Não é consultoria genérica. É um processo de 4 fases com entregáveis claros — cada fase prepara a próxima. Ao final, o perfil trabalha por você.
+          </p>
+        </div>
+      </div>
+      <div class="fases">
+        <div class="fase reveal" data-num="1">
+          <div class="fase-num">1</div>
+          <h3>Posicionamento</h3>
+          <p>Diagnóstico completo, definição do público ideal, proposta de valor única, reescrita da bio.</p>
+          <div class="fase-days">5 – 7 dias</div>
+        </div>
+        <div class="fase reveal" data-num="2" style="transition-delay:0.1s">
+          <div class="fase-num">2</div>
+          <h3>Mensagem</h3>
+          <p>Mapeamento das dores reais, voz de marca, primeiros textos, script de DM para você usar.</p>
+          <div class="fase-days">5 – 7 dias</div>
+        </div>
+        <div class="fase reveal" data-num="3" style="transition-delay:0.2s">
+          <div class="fase-num">3</div>
+          <h3>Estrutura</h3>
+          <p>Calendário editorial com função clara, fluxo de DM para qualificar leads, landing page simples.</p>
+          <div class="fase-days">7 dias</div>
+        </div>
+        <div class="fase reveal" data-num="4" style="transition-delay:0.3s">
+          <div class="fase-num">4</div>
+          <h3>Ativação</h3>
+          <p>Publicação dos primeiros conteúdos, prospecção ativa, ajuste de copy com base em respostas reais.</p>
+          <div class="fase-days">14 dias</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="oferta" id="oferta">
+    <div class="reveal">
+      <div class="section-label">A oferta</div>
+      <h2 class="section-title">Dois caminhos.<br>Uma direção.</h2>
+      <p class="section-sub">Comece pela Fundação e avalie o resultado antes de qualquer decisão sobre continuidade.</p>
+    </div>
+    <div class="oferta-cards">
+      <div class="oferta-card reveal">
+        <h3>Fundação</h3>
+        <div class="oferta-price">R$400 <span>/ único</span></div>
+        <p class="oferta-desc">O processo completo de posicionamento entregue em 14 dias corridos após onboarding.</p>
+        <ul class="oferta-items">
+          <li>Diagnóstico completo do perfil</li>
+          <li>Reposicionamento de bio</li>
+          <li>Voz de marca definida</li>
+          <li>9 posts planejados com copy + briefing</li>
+          <li>Script de DM pronto para usar</li>
+          <li>Prazo: 14 dias corridos</li>
+        </ul>
+      </div>
+      <div class="oferta-card featured reveal" style="transition-delay:0.1s">
+        <div class="oferta-badge">Recorrente</div>
+        <h3>Execução Contínua</h3>
+        <div class="oferta-price">R$500 <span>/ mês</span></div>
+        <p class="oferta-desc">Gestão completa do perfil com contrato mínimo de 3 meses. O sistema funcionando enquanto você treina.</p>
+        <ul class="oferta-items">
+          <li>Posts, carrosséis e reels mensais</li>
+          <li>Copy + design + edição integrados</li>
+          <li>Gestão estratégica do perfil</li>
+          <li>Ajustes contínuos de mensagem</li>
+          <li>Relatório mensal de resultados</li>
+          <li>Contrato mínimo: 3 meses</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-final" id="cta">
+    <div class="cta-glow"></div>
+    <div class="reveal">
+      <h2>Diagnóstico gratuito<br>do seu perfil — hoje.</h2>
+      <p>20 minutos. Sem compromisso. Você avalia o raciocínio antes de qualquer decisão.</p>
+      <a href="https://wa.me/5521983118830?text=Ol%C3%A1%2C+quero+o+diagn%C3%B3stico+gratuito+do+meu+perfil" class="btn-primary" target="_blank">
+        Falar no WhatsApp →
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">Pulso</div>
+    <div class="footer-text">@osoares.gustavo · Sistema de Captação Estruturada</div>
+    <div class="footer-text">Rio de Janeiro · 2026</div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // hero já aparece no load
+    setTimeout(() => {
+      document.querySelector('.hero .reveal')?.classList.add('visible');
+    }, 100);
+  </script>
+</body>
+</html>
