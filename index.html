@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pulso — Sistema de Captação para Personal Trainers</title>
+  <title>Pulso — Sistema de Captação para Autônomos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
@@ -226,6 +226,7 @@
     }
 
     .stat-item { text-align: center; }
+
     .stat-number {
       font-family: var(--font-display);
       font-size: 2.4rem;
@@ -236,6 +237,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+
     .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.02em; }
 
     section { position: relative; z-index: 1; }
@@ -288,7 +290,10 @@
     }
     .dor-card:hover { border-color: rgba(91,108,255,0.3); transform: translateY(-4px); }
 
-    .dor-icon { font-size: 1.8rem; margin-bottom: 16px; }
+    .dor-icon {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+    }
 
     .dor-card h3 {
       font-family: var(--font-display);
@@ -312,7 +317,10 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .metodo-inner { max-width: 1000px; margin: 0 auto; }
+    .metodo-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
 
     .metodo-header {
       display: grid;
@@ -535,6 +543,7 @@
 
     .footer-text { font-size: 0.82rem; color: var(--muted); }
 
+    /* reveal ao scroll */
     .reveal {
       opacity: 0;
       transform: translateY(24px);
@@ -542,6 +551,7 @@
     }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
+    /* mobile */
     @media (max-width: 768px) {
       nav { padding: 16px 20px; }
       .hero { padding: 100px 20px 60px; }
@@ -558,19 +568,21 @@
 </head>
 <body>
 
+  <!-- Nav -->
   <nav>
     <div class="nav-logo">Pulso</div>
-    <a href="#cta" class="nav-cta">Quero meus alunos</a>
+    <a href="#cta" class="nav-cta">Quero meus clientes</a>
   </nav>
 
+  <!-- Hero -->
   <section class="hero">
     <div class="hero-glow"></div>
     <div class="hero-grid"></div>
     <div class="hero-inner reveal">
       <div class="hero-badge">Sistema de Captação Estruturada</div>
-      <h1>Pare de depender de<br><em>indicação para ter aluno.</em></h1>
+      <h1>Pare de depender de<br><em>indicação para ter cliente.</em></h1>
       <p class="hero-sub">
-        Construo o sistema de captação do personal trainer que já sobrevive da profissão — mas ainda não sabe de onde vem o próximo aluno.
+        Construo o sistema de captação do autônomo que já sobrevive da profissão — mas ainda não sabe de onde vem o próximo cliente.
       </p>
       <div class="hero-actions">
         <a href="#cta" class="btn-primary">Quero diagnóstico gratuito</a>
@@ -579,6 +591,7 @@
     </div>
   </section>
 
+  <!-- Stats -->
   <div class="stats-bar">
     <div class="stat-item reveal">
       <div class="stat-number">30d</div>
@@ -594,6 +607,7 @@
     </div>
   </div>
 
+  <!-- Problema -->
   <div class="dor">
     <div class="reveal">
       <div class="section-label">O problema</div>
@@ -604,7 +618,7 @@
       <div class="dor-card reveal">
         <div class="dor-icon">📉</div>
         <h3>Instabilidade todo mês</h3>
-        <p>Você não sabe de onde vem o próximo aluno. A renda oscila e a ansiedade cresce junto com a agenda vazia.</p>
+        <p>Você não sabe de onde vem o próximo cliente. A renda oscila e a ansiedade cresce junto com a agenda vazia.</p>
       </div>
       <div class="dor-card reveal" style="transition-delay:0.1s">
         <div class="dor-icon">🔄</div>
@@ -614,11 +628,12 @@
       <div class="dor-card reveal" style="transition-delay:0.2s">
         <div class="dor-icon">📱</div>
         <h3>Posta sem resultado</h3>
-        <p>Conteúdo regular, engajamento baixo, nenhum aluno chegando pelo digital. Esforço sem retorno.</p>
+        <p>Conteúdo regular, engajamento baixo, nenhum cliente chegando pelo digital. Esforço sem retorno.</p>
       </div>
     </div>
   </div>
 
+  <!-- Método -->
   <div class="metodo" id="metodo">
     <div class="metodo-inner">
       <div class="metodo-header">
@@ -661,6 +676,7 @@
     </div>
   </div>
 
+  <!-- Oferta -->
   <div class="oferta" id="oferta">
     <div class="reveal">
       <div class="section-label">A oferta</div>
@@ -698,6 +714,7 @@
     </div>
   </div>
 
+  <!-- CTA -->
   <div class="cta-final" id="cta">
     <div class="cta-glow"></div>
     <div class="reveal">
@@ -709,6 +726,7 @@
     </div>
   </div>
 
+  <!-- Footer -->
   <footer>
     <div class="footer-logo">Pulso</div>
     <div class="footer-text">@osoares.gustavo · Sistema de Captação Estruturada</div>
@@ -716,15 +734,18 @@
   </footer>
 
   <script>
+    // fade nos elementos ao entrar na viewport
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
       });
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // hero já aparece no load
+    // hero aparece logo no load
     setTimeout(() => {
       document.querySelector('.hero .reveal')?.classList.add('visible');
     }, 100);
